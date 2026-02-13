@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>signup</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --bs-body-font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background-color: #212529; /* dark background */
+      color: #fff; /* white text */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: var(--bs-body-font-family);
+    }
+
+    .form-signin {
+      margin: auto;
+      max-width: 330px;
+      padding: 15px;
+      background-color: #2c2f33;
+      border-radius: 10px;
+    }
+
+    .form-signin .form-control {
+      background-color: #343a40;
+      border: 1px solid #495057;
+      color: #fff;
+    }
+
+    .form-signin .form-control:focus {
+      background-color: #3e444a;
+      color: #fff;
+    }
+
+    .alert-container {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1055; /* High enough to sit above all elements */
+    }
+  </style>
+</head>
+<body>
+  {% if messages %}
+  {% comment %} <div style="position: absolute; top: 0; left: 0; width: 100%; z-index: 9999;"> {% endcomment %}
+    <div class="container position-fixed top-0 start-0 w-100 z-3">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show  m-0 text-center" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <main class="form-signin text-center">
+    {% comment %} <img class="mb-4" src="https://getbootstrap.com/docs/5.3/assets/brand/bootstrap-logo-shadow.png" alt="" width="72" height="57"> {% endcomment %}
+    <h1 class="h3 mb-3 fw-normal">New User?</h1>
+    <h3 class="h3 mb-3 fw-normal">Create Account Now</h3>
+
+    <form method="POST">
+    {% csrf_token %}
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control {% if messages %}is-invalid{% endif %}" 
+         id="username" name="username" placeholder="Username" required
+         value="{{ request.POST.username }}">
+        <label for="username" class="form-label">Username</label>
+
+        {% if username_error %}
+          
+            <div class="invalid-feedback d-block">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-exclamation-triangle-fill me-2" viewBox="0 0 16 16">
+                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.964 0L.165 13.233c-.457.778.091 1.767.982 1.767h13.707c.89 0 
+                   1.438-.99.982-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 
+                   0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1-2.002 0 1 1 0 0 1 2.002 0z"/>
+              </svg>
+              {{ username_error }}
+            </div>
+          
+        {% endif %}
+      </div>
+
+      <div class="form-floating mb-3">
+        <input type="email" class="form-control {% if email_error %}is-invalid{% endif %}" 
+         id="email" name="email" placeholder="Email address" required
+         value="{{ request.POST.email }}">
+        <label for="email">Email address</label>
+
+        {% if email_error %}
+          <div class="invalid-feedback d-block">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-exclamation-triangle-fill me-2" viewBox="0 0 16 16">
+              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.964 0L.165 13.233c-.457.778.091 1.767.982 
+                 1.767h13.707c.89 0 1.438-.99.982-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 
+                 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1-2.002 
+                 0 1 1 0 0 1 2.002 0z"/>
+            </svg>
+            {{ email_error }}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" required>
+        <label for="floatingPassword">Password</label>
+      </div>
+
+      {% comment %} <div class="checkbox mb-3 text-start">
+        <label>
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+      </div> {% endcomment %}
+      <button class="w-100 btn btn-lg btn-primary" type="submit">sign up</button>
+    </form>
+  </main>
+
+  {% if redirect_to_login %}
+    <script>
+      // Redirect after 3 seconds
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 3000);
+    </script>
+  {% endif %}
+
+</body>
+</html>
